@@ -33,7 +33,7 @@ class Fraction:
         return self._num
     @property
     def denominator(self):
-        return self.den
+        return self._den
 
 # ------------------ Textual representations ------------------
 
@@ -43,17 +43,26 @@ class Fraction:
         PRE : none
         POST : Retourne la fraction en chaine de caractère
         """
-        return f"{self.num}/{self.den}"
+        return f"{self._num}/{self._den}"
 
     def as_mixed_number(self) :
         """Return a textual representation of the reduced form of the fraction as a mixed number
 
         A mixed number is the sum of an integer and a proper fraction
 
-        PRE : ?
-        POST : ?
+        PRE : -
+        POST : Renvoie un entier et sa fraction restante
+        Raise : ValueError si num < den 
         """
-        pass
+        if self._num < self._den:
+            raise ValueError("le nominateur est plus grand que le dénominateur")
+        if self._num % self._den == 0:
+            return self._num / self._den
+        else:
+            integ = self._num - (self._num % self._den)
+            frac = f"{self._num % self._den}/{self._den}"
+            return f"{integ},{frac}"
+
 
     
 # ------------------ Operators overloading ------------------
