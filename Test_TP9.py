@@ -1,10 +1,16 @@
 from TP7 import *
 import unittest
 
-a = Fraction(0,3)
+class TestMethods(unittest.TestCase):
 
-#b = a.as_mixed_number()
+    def test_init(self):
+        frac1 = Fraction(34,58)
+        self.assertEqual(frac1.numerator,17)
+        self.assertEqual(frac1.denominator,29)
 
-#print (b)
-b = a.is_zero()
-print(b) 
+
+   # def test_string(self):
+
+
+if __name__ == '__main__':
+    unittest.main()
