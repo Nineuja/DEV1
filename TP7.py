@@ -45,7 +45,7 @@ class Fraction:
         PRE : -
         POST : Retourne la fraction en chaine de caractère
         """
-        if self._den == 1:
+        if self.denominator == 1:
             return str(self.numerator)
         else:
             return f"{self.numerator}/{self.denominator}"
