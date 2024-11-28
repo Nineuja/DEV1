@@ -46,9 +46,9 @@ class Fraction:
         POST : Retourne la fraction en chaine de caractère
         """
         if self._den == 1:
-            return str(self._num)
+            return str(self.numerator)
         else:
-            return f"{self._num}/{self._den}"
+            return f"{self.numerator}/{self.denominator}"
 
     def as_mixed_number(self) :
         """Return a textual representation of the reduced form of the fraction as a mixed number
@@ -59,13 +59,13 @@ class Fraction:
         POST : Renvoie un entier et sa fraction restante
         Raise : ValueError si num < den 
         """
-        if self._num < self._den:
+        if self.numerator < self.denominator:
             raise ValueError("le nominateur doit être plus grand que le dénominateur")
-        if self._num % self._den == 0:
-            return self._num // self._den
+        if self.numerator % self.denominator == 0:
+            return self.numerator // self.denominator
         else:
-            integ = self._num - (self._num % self._den)
-            frac = f"{self._num % self._den}/{self._den}"
+            integ = self.numerator - (self.numerator % self.denominator)
+            frac = f"{self.numerator % self.denominator}/{self.denominator}"
             return f"{integ} et {frac}"
 
 
@@ -82,7 +82,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             raise TypeError("other doit être un object de classe Fraction.")
         
-        if self._den == other.den:
+        if self.denominator == other.denominator:
             new_num = self.numerator + other.numerator
             new_den = self.denominator
         else:
@@ -100,7 +100,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             raise TypeError("other doit être un object de classe Fraction.")
         
-        if self._den == other.den:
+        if self.denominator == other.denominator:
             new_num = self.numerator - other.numerator
             new_den = self.denominator
         else:
@@ -133,7 +133,7 @@ class Fraction:
         if not isinstance(other, Fraction):
             raise TypeError("other doit être un object de classe Fraction.")
         
-        if other.num == 0:
+        if other.numerator == 0:
             raise ValueError("Pas de division par 0")
         
         new_num = self.numerator * other.denominator
@@ -212,7 +212,7 @@ class Fraction:
         PRE : -
         POST : Renvoie True si la Fraction est égale à une valeur strictement en dessous de 1 
         """
-        if self.numerator / self.denominator < 1:
+        if abs(self.numerator) / abs(self.denominator) < 1:
             return True
         else:
             return False
@@ -243,4 +243,32 @@ class Fraction:
         new_den = self.denominator * other.denominator
         difference = Fraction(abs(new_num), new_den)
         return difference.numerator == 1 and difference.denominator != 0
+    
+f1 = Fraction(1,2)
+f2 = Fraction(7,9)
+f3 = Fraction(1,2)
+f4 = Fraction(5,2)
+f5 = Fraction(0,5)
+f6 = Fraction(4,2)
+f7 = Fraction(8,9)
+if __name__ == "__main__":
+    print(f1)
+    print(f4.as_mixed_number())
+    print(f1 + f2)
+    print(f1 - f2)
+    print(f1 * f2)
+    print(f4 / f2)
+    print(f1**4)
+    print(f1 == f2)
+    print(f1 == f3)
+    print(f1.__float__())
+    print(f5.is_zero())
+    print(f4.is_zero())
+    print(f6.is_integer())
+    print(f1.is_proper())
+    print(f6.is_proper())
+    print(f1.is_unit())
+    print(f2.is_adjacent_to(f7))
+
+
 
