@@ -57,15 +57,12 @@ class Fraction:
 
         PRE : -
         POST : Renvoie un entier et sa fraction restante
-        Raise :
         """
-
-        if self.numerator % self.denominator == 0:
-            return str(self.numerator // self.denominator)
-        else:
-            integ = (self.numerator - (self.numerator % self.denominator)) // self.denominator
-            frac = f"{self.numerator % self.denominator}/{self.denominator}"
-            return f"{integ} et {frac}"
+        temp = ""
+        if self.numerator % self.denominator != 0 :
+            # If there is a rest to the division
+            rest = f" and {self.numerator % self.denominator}/{self.denominator}"
+        return f"{self.numerator // self.denominator}" + temp
 
 
     
