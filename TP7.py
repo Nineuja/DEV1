@@ -57,14 +57,13 @@ class Fraction:
 
         PRE : -
         POST : Renvoie un entier et sa fraction restante
-        Raise : ValueError si num < den 
+        Raise :
         """
-        if self.numerator < self.denominator:
-            raise ValueError("le nominateur doit être plus grand que le dénominateur")
+
         if self.numerator % self.denominator == 0:
-            return self.numerator // self.denominator
+            return str(self.numerator // self.denominator)
         else:
-            integ = self.numerator - (self.numerator % self.denominator)
+            integ = (self.numerator - (self.numerator % self.denominator)) // self.denominator
             frac = f"{self.numerator % self.denominator}/{self.denominator}"
             return f"{integ} et {frac}"
 
