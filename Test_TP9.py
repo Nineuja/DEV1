@@ -8,14 +8,26 @@ class TestMethods(unittest.TestCase):
         self.assertEqual(frac1.numerator,17)
         self.assertEqual(frac1.denominator,29)
 
-    def test_init_zero(self):
+        frac2 = Fraction()
+        self.assertEqual(frac2.numerator,0)
+        self.assertEqual(frac2.denominator,1)
+
+        frac3 = Fraction(-27,-29)
+        self.assertEqual(frac3.numerator,27)
+        self.assertEqual(frac3.denominator,29)
+
+        frac4 = Fraction(13, -21)
+        self.assertEqual(frac4.numerator, -13)
+        self.assertEqual(frac4.denominator, 21)
+
         with self.assertRaises(ValueError):
             Fraction(3,0)
 
 
+
     def test_string(self):
-        frac_big = Fraction(34,58)
-        self.assertEqual(frac_big.__str__(),"17/29")
+        frac1 = Fraction(34,58)
+        self.assertEqual(frac1.__str__(),"17/29")
 
         frac2 = Fraction(1,4)
         self.assertEqual(frac2.__str__(), "1/4")

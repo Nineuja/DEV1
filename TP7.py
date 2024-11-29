@@ -1,8 +1,8 @@
 class Fraction:
     """Class representing a fraction and operations on it
 
-    Author : V. Van den Schrieck
-    Date : October 2021
+    Author : A . Vandermeulen
+    Date : November  2024
     This class allows fraction manipulations through several operations.
     """
 
@@ -11,6 +11,7 @@ class Fraction:
 
             PRE : none
             POST : initialise les variables d'instances de l'object de classe Fraction, réduit la fraction au maximum et si le dénominateur est négatif, met le - au nominateur.
+            RAISE : Value Error si le dénominateur est égal à 0
         """
         if den == 0:
             raise ValueError("Impossible de diviser par zéro")
@@ -19,12 +20,14 @@ class Fraction:
             den = -den
             num = -num
 
+
         num_reduit = num
         den_reduit = den
         while den_reduit != 0:
             temp = num_reduit % den_reduit
             num_reduit = den_reduit
             den_reduit = temp
+
 
         self._num = num // num_reduit
         self._den = den // num_reduit
