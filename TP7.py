@@ -9,7 +9,7 @@ class Fraction:
     def __init__(self, num: int=0, den: int=1):
         """This builds a fraction based on some numerator and denominator.
 
-            PRE : none
+           PRE : none
             POST : initialise les variables d'instances de l'object de classe Fraction, réduit la fraction au maximum et si le dénominateur est négatif, met le - au nominateur.
             RAISE : Value Error si le dénominateur est égal à 0
         """
@@ -162,10 +162,9 @@ class Fraction:
         """
         if not isinstance(other, Fraction):
             raise TypeError("other doit être un object de classe Fraction.")
-        if self.numerator == other.numerator and self.denominator == other.denominator:
-            return True
-        else:
-            return False
+        output = (self.numerator == other.numerator and self.denominator == other.denominator)
+        return output
+
         
     def __float__(self) :
         """Returns the decimal value of the fraction
@@ -188,10 +187,8 @@ class Fraction:
         PRE : -
         POST : Renvoie True si la fraction est égale à 0sinon renvoie False
         """
-        if self.numerator == 0:
-            return True
-        else:
-            return False
+        output =  (self.numerator == 0)
+        return output
             
 
 
@@ -201,10 +198,8 @@ class Fraction:
         PRE : -
         POST : Renvoie True si la Fraction est égale à un entier
         """
-        if self.numerator % self.denominator == 0:
-            return True
-        else:
-            return False
+        output = ((self.numerator % self.denominator) == 0)
+        return output
         
 
     def is_proper(self):
@@ -213,10 +208,8 @@ class Fraction:
         PRE : -
         POST : Renvoie True si la Fraction est égale à une valeur strictement en dessous de 1 
         """
-        if abs(self.numerator) / abs(self.denominator) < 1:
-            return True
-        else:
-            return False
+        output = abs(self.numerator) / abs(self.denominator) < 1
+        return output
         
     def is_unit(self):
         """Check if a fraction's numerator is 1 in its reduced form
@@ -224,10 +217,8 @@ class Fraction:
         PRE : -
         POST : Renvoie True si le numérateur de notre object est égak à 1
         """
-        if self.numerator == 1:
-            return True
-        else:
-            return False
+        output = self.numerator == 1
+        return output
 
     def is_adjacent_to(self, other : object) :
         """Check if two fractions differ by a unit fraction
