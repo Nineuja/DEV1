@@ -61,7 +61,7 @@ class Fraction:
         temp = ""
         if self.numerator % self.denominator != 0 :
             # If there is a rest to the division
-            rest = f" and {self.numerator % self.denominator}/{self.denominator}"
+            temp = f" and {self.numerator % self.denominator}/{self.denominator}"
         return f"{self.numerator // self.denominator}" + temp
 
 
@@ -77,13 +77,15 @@ class Fraction:
          """
         if not isinstance(other, Fraction):
             raise TypeError("other doit être un object de classe Fraction.")
-        
+
+        if other.numerator == 0:
+            return self
         if self.denominator == other.denominator:
             new_num = self.numerator + other.numerator
             new_den = self.denominator
         else:
             new_num = (self.numerator * other.denominator) + (other.numerator * self.denominator)
-            new_den = (self.denominator * other.denominator) + (other.denominator * self.denominator)  
+            new_den = self.denominator * other.denominator
         return Fraction(new_num,new_den)
 
     def __sub__(self, other: object):
@@ -153,7 +155,7 @@ class Fraction:
         
         PRE : -
         POST : retourne True si les deux objects de class Fractions sont égaux
-        Raises : TypeError si other n'est pas un object de classe Fraction and ValueError si le numérateur de other est égale à 0
+        Raises : TypeError si other n'est pas un object de classe Fraction
         """
         if not isinstance(other, Fraction):
             raise TypeError("other doit être un object de classe Fraction.")
