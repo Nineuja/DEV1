@@ -186,7 +186,7 @@ class CSVMerger:
 
     def advanced_sort_method(self, data: List[List[str]]) -> Optional[List[List[str]]]:
         """
-        Méthode de tri avancée avec sélection de colonne par nom ou catégorie.
+        Méthode de tri avancée avec options de filtrage détaillées.
 
         Args:
             data (List[List[str]]): Données à trier
@@ -199,7 +199,7 @@ class CSVMerger:
 
         while True:
             # Afficher les options de colonnes
-            print("\nChoisissez la colonne à trier :")
+            print("\nChoisissez la colonne à trier/filtrer :")
             for i, col in enumerate(self.columns.keys(), 1):
                 print(f"{i}. {col.capitalize()}")
             print("5. Terminer le tri et sauvegarder")
@@ -241,29 +241,86 @@ class CSVMerger:
                 column_name = list(self.columns.keys())[int(choix_colonne) - 1]
                 column_index = self.columns[column_name]
 
-                # Choix de l'ordre de tri avec validation
-                ordre_options = ['1', '2']
-                print("\nChoisissez l'ordre de tri :")
-                print("1. Ascendant")
-                print("2. Descendant")
+                # Choix du type de filtrage
+                print("\nChoisissez le type de filtrage :")
+                print("1. Trier")
+                print("2. Filtrer")
 
-                choix_ordre = self._get_validated_input(
-                    "Entrez votre choix d'ordre (1-2) : ",
-                    ordre_options,
-                    "Veuillez entrer 1 pour ascendant ou 2 pour descendant."
+                choix_filtrage = self._get_validated_input(
+                    "Entrez votre choix (1-2) : ",
+                    ['1', '2'],
+                    "Veuillez entrer 1 pour trier ou 2 pour filtrer."
                 )
-                reverse = choix_ordre == '2'
 
-                # Trier les données
-                if column_index in [1, 2]:  # Colonnes numériques
-                    current_data = sorted(current_data, key=lambda x: float(x[column_index]), reverse=reverse)
-                else:  # Colonnes textuelles
-                    current_data = sorted(current_data, key=lambda x: x[column_index], reverse=reverse)
+                if choix_filtrage == '1':
+                    # Choix de l'ordre de tri
+                    print("\nChoisissez l'ordre de tri :")
+                    print("1. Ascendant")
+                    print("2. Descendant")
 
-                # Afficher les données triées
-                print("\n--- Données triées ---")
-                for row in current_data:
-                    print(row)
+                    choix_ordre = self._get_validated_input(
+                        "Entrez votre choix d'ordre (1-2) : ",
+                        ['1', '2'],
+                        "Veuillez entrer 1 pour ascendant ou 2 pour descendant."
+                    )
+                    reverse = choix_ordre == '2'
+
+                    # Trier les données
+                    if column_index in [1, 2]:  # Colonnes numériques
+                        current_data = sorted(current_data, key=lambda x: float(x[column_index]), reverse=reverse)
+                    else:  # Colonnes textuelles
+                        current_data = sorted(current_data, key=lambda x: x[column_index], reverse=reverse)
+
+                else:  # Filtrage
+                    if column_index in [1, 2]:  # Colonnes numériques
+                        print("\nChoisissez le type de filtrage numérique :")
+                        print("1. Valeur exacte")
+                        print("2. Plage de valeurs")
+
+                        choix_numerique = self._get_validated_input(
+                            "Entrez votre choix (1-2) : ",
+                            ['1', '2'],
+                            "Veuillez entrer 1 pour valeur exacte ou 2 pour plage."
+                        )
+
+                        if choix_numerique == '1':
+                            # Filtrage par valeur exacte
+                            valeur = input(f"Entrez la {column_name} exacte à rechercher : ").strip()
+                            current_data = [row for row in current_data if row[column_index] == valeur]
+                        else:
+                            # Filtrage par plage de valeurs
+                            min_val = float(input(f"Entrez la {column_name} minimale : ").strip())
+                            max_val = float(input(f"Entrez la {column_name} maximale : ").strip())
+                            current_data = [row for row in current_data if
+                                            min_val <= float(row[column_index]) <= max_val]
+
+                    else:  # Colonnes textuelles (nom ou catégorie)
+                        print("\nChoisissez le type de filtrage :")
+                        print("1. Valeur exacte")
+                        print("2. Contient")
+
+                        choix_texte = self._get_validated_input(
+                            "Entrez votre choix (1-2) : ",
+                            ['1', '2'],
+                            "Veuillez entrer 1 pour valeur exacte ou 2 pour recherche partielle."
+                        )
+
+                        valeur = input(f"Entrez la {column_name} à rechercher : ").strip().lower()
+
+                        if choix_texte == '1':
+                            # Filtrage par valeur exacte
+                            current_data = [row for row in current_data if row[column_index].lower() == valeur]
+                        else:
+                            # Filtrage par contenu
+                            current_data = [row for row in current_data if valeur in row[column_index].lower()]
+
+                # Afficher les données filtrées/triées
+                if current_data:
+                    print("\n--- Données filtrées/triées ---")
+                    for row in current_data:
+                        print(row)
+                else:
+                    print("Aucune donnée ne correspond aux critères.")
 
             except ValueError as e:
                 print(f"\nErreur de conversion : {e}")
