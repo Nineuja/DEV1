@@ -4,9 +4,9 @@ import sys
 from typing import List, Optional
 from datetime import datetime
 
-
 class InputError(Exception):
     """Exception personnalisée pour les erreurs d'input utilisateur."""
+    pass
 
 
 class CSVMerger:
@@ -45,8 +45,7 @@ class CSVMerger:
     @staticmethod
     def _get_base_path() -> str:
         """
-        Obtient le chemin de base du script de manière
-        compatible multi-plateforme.
+        Obtient le chemin de base du script de manière compatible multi-plateforme.
 
         Returns:
             str: Chemin absolu du répertoire contenant le script
@@ -57,8 +56,7 @@ class CSVMerger:
 
     def _create_directories(self) -> None:
         """
-        Crée les répertoires d'entrée, de sortie et
-        de tri de manière sécurisée.
+        Crée les répertoires d'entrée, de sortie et de tri de manière sécurisée.
         """
         try:
             os.makedirs(self.input_folder, exist_ok=True)
@@ -68,8 +66,7 @@ class CSVMerger:
             print(f"Erreur lors de la création des répertoires : {e}")
             sys.exit(1)
 
-    @staticmethod
-    def _validate_csv_file(file_path: str) -> bool:
+    def _validate_csv_file(self, file_path: str) -> bool:
         """
         Vérifie la structure du fichier CSV.
 
@@ -93,8 +90,7 @@ class CSVMerger:
         Fusionne les fichiers CSV du dossier d'entrée.
 
         Returns:
-            Optional[List[List[str]]]: Liste
-            des données fusionnées ou None en cas d'erreur
+            Optional[List[List[str]]]: Liste des données fusionnées ou None en cas d'erreur
         """
         merged_data: List[List[str]] = []
 
@@ -129,8 +125,7 @@ class CSVMerger:
             return None
         return merged_data
 
-    @staticmethod
-    def write_csv(data: List[List[str]], output_path: str) -> None:
+    def write_csv(self, data: List[List[str]], output_path: str) -> None:
         """
         Écrit les données dans un fichier CSV.
 
@@ -144,8 +139,7 @@ class CSVMerger:
 
         # Écrire le fichier CSV
         if data:
-            with open(output_path, 'w', newline='',
-                      encoding='utf-8') as csvfile:
+            with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
                 writer = csv.writer(csvfile)
                 # Réajouter l'en-tête
                 writer.writerow(['Nom', 'Quantité', 'Prix', 'Catégorie'])
@@ -155,8 +149,7 @@ class CSVMerger:
         else:
             print("Aucune donnée à écrire.")
 
-    @staticmethod
-    def _get_validated_input(
+    def _get_validated_input(self,
                              prompt: str,
                              valid_options: Optional[List[str]] = None,
                              error_message: Optional[str] = None) -> str:
@@ -184,30 +177,25 @@ class CSVMerger:
                     return user_input
 
                 # Lancer une exception si l'input n'est pas valide
-                raise InputError(error_message or "Option invalide."
-                                 + " Veuillez réessayer.")
+                raise InputError(error_message or "Option invalide. Veuillez réessayer.")
 
             except InputError as e:
                 print(f"\n{e}")
             except Exception as e:
                 print(f"\nUne erreur inattendue s'est produite : {e}")
 
-    def advanced_sort_method(self,
-                             data:
-                             List[List[str]]) -> Optional[List[List[str]]]:
+    def advanced_sort_method(self, data: List[List[str]]) -> Optional[List[List[str]]]:
         """
         Méthode de tri avancée avec options de filtrage détaillées.
 
         Args:
-            data (List[List[str]]): Données originales à trier
+            data (List[List[str]]): Données à trier
 
         Returns:
             Optional[List[List[str]]]: Données triées ou None
         """
-        # MODIFICATION CLÉE : Créer une copie des données ORIGINALES
-        # au lieu de modifier les données à chaque itération
-        original_data = data.copy()
-        current_data = original_data.copy()
+        # Créer une copie des données pour ne pas modifier l'original
+        current_data = data.copy()
 
         while True:
             # Afficher les options de colonnes
@@ -233,8 +221,7 @@ class CSVMerger:
                 if choix_colonne == '5':
                     # Demander un nom de fichier pour la sauvegarde
                     save_choice = self._get_validated_input(
-                        "Voulez-vous enregistrer ces données triées ?" +
-                        " (o/n) : ",
+                        "Voulez-vous enregistrer ces données triées ? (o/n) : ",
                         ['o', 'n'],
                         "Veuillez répondre par 'o' ou 'n'."
                     )
@@ -242,12 +229,9 @@ class CSVMerger:
                     if save_choice == 'o':
                         # Validation du nom de fichier
                         while True:
-                            filename = input("Entrez le nom du fichier" +
-                                             " CSV (sans extension)" +
-                                             " : ").strip()
+                            filename = input("Entrez le nom du fichier CSV (sans extension) : ").strip()
                             if filename:
-                                output_path = os.path.join(self.sort_folder,
-                                                           f"{filename}.csv")
+                                output_path = os.path.join(self.sort_folder, f"{filename}.csv")
                                 self.write_csv(current_data, output_path)
                                 break
                             print("Le nom de fichier ne peut pas être vide.")
@@ -277,21 +261,15 @@ class CSVMerger:
                     choix_ordre = self._get_validated_input(
                         "Entrez votre choix d'ordre (1-2) : ",
                         ['1', '2'],
-                        "Veuillez entrer 1 pour ascendant" +
-                        " ou 2 pour descendant."
+                        "Veuillez entrer 1 pour ascendant ou 2 pour descendant."
                     )
                     reverse = choix_ordre == '2'
 
                     # Trier les données
                     if column_index in [1, 2]:  # Colonnes numériques
-                        current_data = sorted(current_data,
-                                              key=lambda x:
-                                              float(x[column_index]),
-                                              reverse=reverse)
+                        current_data = sorted(current_data, key=lambda x: float(x[column_index]), reverse=reverse)
                     else:  # Colonnes textuelles
-                        current_data = sorted(current_data,
-                                              key=lambda x: x[column_index],
-                                              reverse=reverse)
+                        current_data = sorted(current_data, key=lambda x: x[column_index], reverse=reverse)
 
                 else:  # Filtrage
                     if column_index in [1, 2]:  # Colonnes numériques
@@ -302,25 +280,19 @@ class CSVMerger:
                         choix_numerique = self._get_validated_input(
                             "Entrez votre choix (1-2) : ",
                             ['1', '2'],
-                            "Veuillez entrer 1 pour valeur" +
-                            " exacte ou 2 pour plage."
+                            "Veuillez entrer 1 pour valeur exacte ou 2 pour plage."
                         )
 
                         if choix_numerique == '1':
                             # Filtrage par valeur exacte
-                            valeur = input(f"Entrez la {column_name}"
-                                           + " exacte à rechercher : ").strip()
-                            current_data = [row for row in current_data if
-                                            row[column_index] == valeur]
+                            valeur = input(f"Entrez la {column_name} exacte à rechercher : ").strip()
+                            current_data = [row for row in current_data if row[column_index] == valeur]
                         else:
                             # Filtrage par plage de valeurs
-                            min_val = float(input(f"Entrez la {column_name}" +
-                                                  " minimale : ").strip())
-                            max_val = float(input(f"Entrez la {column_name}" +
-                                                  " maximale : ").strip())
+                            min_val = float(input(f"Entrez la {column_name} minimale : ").strip())
+                            max_val = float(input(f"Entrez la {column_name} maximale : ").strip())
                             current_data = [row for row in current_data if
-                                            min_val <= float
-                                            (row[column_index]) <= max_val]
+                                            min_val <= float(row[column_index]) <= max_val]
 
                     else:  # Colonnes textuelles (nom ou catégorie)
                         print("\nChoisissez le type de filtrage :")
@@ -330,24 +302,17 @@ class CSVMerger:
                         choix_texte = self._get_validated_input(
                             "Entrez votre choix (1-2) : ",
                             ['1', '2'],
-                            "Veuillez entrer 1 pour valeur exacte ou 2 pour" +
-                            " recherche partielle."
+                            "Veuillez entrer 1 pour valeur exacte ou 2 pour recherche partielle."
                         )
 
-                        valeur = input(f"Entrez la {column_name}" +
-                                       " à rechercher" +
-                                       " : ").strip().lower()
+                        valeur = input(f"Entrez la {column_name} à rechercher : ").strip().lower()
 
                         if choix_texte == '1':
                             # Filtrage par valeur exacte
-                            current_data = [row for row in current_data if
-                                            row[column_index].lower()
-                                            == valeur]
+                            current_data = [row for row in current_data if row[column_index].lower() == valeur]
                         else:
                             # Filtrage par contenu
-                            current_data = [row for row in current_data if
-                                            valeur in
-                                            row[column_index].lower()]
+                            current_data = [row for row in current_data if valeur in row[column_index].lower()]
 
                 # Afficher les données filtrées/triées
                 if current_data:
@@ -362,13 +327,9 @@ class CSVMerger:
             except Exception as e:
                 print(f"\nUne erreur inattendue s'est produite : {e}")
 
-            original_data = data.copy()
-            current_data = original_data.copy()
-
     def generate_csv_report(self, data: List[List[str]]) -> None:
         """
-        Génère un rapport récapitulatif des données CSV
-         et l'exporte dans un fichier txt.
+        Génère un rapport récapitulatif des données CSV et l'exporte dans un fichier txt.
 
         Args:
             data (List[List[str]]): Données à analyser pour le rapport
@@ -391,8 +352,7 @@ class CSVMerger:
             # Statistiques générales
             total_items = len(data)
             total_quantity = sum(quantities)
-            total_value = sum(price * quantity for price, quantity in
-                              zip(prices, quantities))
+            total_value = sum(price * quantity for price, quantity in zip(prices, quantities))
 
             # Analyse par catégorie
             categories = {}
@@ -402,8 +362,7 @@ class CSVMerger:
                 value = float(row[2]) * qty
 
                 if category not in categories:
-                    categories[category] = {'quantity': 0,
-                                            'total_value': 0, 'items': []}
+                    categories[category] = {'quantity': 0, 'total_value': 0, 'items': []}
 
                 categories[category]['quantity'] += qty
                 categories[category]['total_value'] += value
@@ -411,8 +370,7 @@ class CSVMerger:
 
             # Rédaction du rapport
             with open(filepath, 'w', encoding='utf-8') as report_file:
-                report_file.write("=== RAPPORT RÉCAPITULATIF" +
-                                  " DES DONNÉES CSV ===\n")
+                report_file.write("=== RAPPORT RÉCAPITULATIF DES DONNÉES CSV ===\n")
                 report_file.write(f"Date et heure : {current_time}\n\n")
 
                 report_file.write("--- STATISTIQUES GÉNÉRALES ---\n")
@@ -421,19 +379,12 @@ class CSVMerger:
                 report_file.write(f"Valeur totale : {total_value:.2f} €\n\n")
 
                 report_file.write("--- ANALYSE PAR CATÉGORIE ---\n")
-                for category, data in sorted(categories.items(),
-                                             key=lambda x:
-                                             x[1]['total_value'],
-                                             reverse=True):
+                for category, data in sorted(categories.items(), key=lambda x: x[1]['total_value'], reverse=True):
                     report_file.write(f"\n{category.upper()}:\n")
-                    report_file.write("  Quantité totale :" +
-                                      f" {data['quantity']:.2f}\n")
-                    report_file.write("  Valeur totale :" +
-                                      f"{data['total_value']:.2f} €\n")
-                    report_file.write("  Nombre d'articles :" +
-                                      f"{len(data['items'])}\n")
-                    report_file.write("  Articles : " +
-                                      ", ".join(data['items']) + "\n")
+                    report_file.write(f"  Quantité totale : {data['quantity']:.2f}\n")
+                    report_file.write(f"  Valeur totale : {data['total_value']:.2f} €\n")
+                    report_file.write(f"  Nombre d'articles : {len(data['items'])}\n")
+                    report_file.write("  Articles : " + ", ".join(data['items']) + "\n")
 
             print(f"Rapport généré : {filepath}")
 
@@ -442,8 +393,7 @@ class CSVMerger:
 
     def run(self) -> None:
         """
-        Méthode principale exécutant la fusion des CSV
-        et interaction utilisateur.
+        Méthode principale exécutant la fusion des CSV et interaction utilisateur.
         """
         # Les étapes précédentes restent identiques
         # Créer les dossiers
@@ -463,8 +413,7 @@ class CSVMerger:
             sys.exit(1)
 
         # Écriture et affichage des données
-        merged_output_path = os.path.join(self.output_folder,
-                                          'produits_fusionnes.csv')
+        merged_output_path = os.path.join(self.output_folder, 'produits_fusionnes.csv')
         self.write_csv(merged_data, merged_output_path)
 
         print("\n--- Données fusionnées ---")
@@ -483,8 +432,7 @@ class CSVMerger:
                 choix_principal = self._get_validated_input(
                     "Entrez votre choix (1-4) : ",
                     ['1', '2', '3',],
-                    "Veuillez entrer 1 pour trier, 2 pour filtrer," +
-                    "3 pour générer un rapport ou 4 pour quitter."
+                    "Veuillez entrer 1 pour trier, 2 pour filtrer, 3 pour générer un rapport ou 4 pour quitter."
                 )
 
                 if choix_principal == '3':
@@ -493,7 +441,11 @@ class CSVMerger:
 
                 if choix_principal == '1':
                     # Appeler la méthode de tri avancée
-                    self.advanced_sort_method(merged_data)
+                    sorted_data = self.advanced_sort_method(merged_data)
+
+                    if sorted_data:
+                        # Mettre à jour les données fusionnées avec les données triées
+                        merged_data = sorted_data
 
                 if choix_principal == '2':
                     # Générer un rapport récapitulatif
