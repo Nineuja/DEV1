@@ -1,5 +1,5 @@
 === RAPPORT RÉCAPITULATIF DES DONNÉES CSV ===
-Date et heure : 2024-12-15_14-02-57
+Date et heure : 2024-12-15_14-20-27
 
 --- STATISTIQUES GÉNÉRALES ---
 Nombre total d'articles : 8
