@@ -189,13 +189,15 @@ class CSVMerger:
         Méthode de tri avancée avec options de filtrage détaillées.
 
         Args:
-            data (List[List[str]]): Données à trier
+            data (List[List[str]]): Données originales à trier
 
         Returns:
             Optional[List[List[str]]]: Données triées ou None
         """
-        # Créer une copie des données pour ne pas modifier l'original
-        current_data = data.copy()
+        # MODIFICATION CLÉE : Créer une copie des données ORIGINALES
+        # au lieu de modifier les données à chaque itération
+        original_data = data.copy()
+        current_data = original_data.copy()
 
         while True:
             # Afficher les options de colonnes
@@ -327,72 +329,8 @@ class CSVMerger:
             except Exception as e:
                 print(f"\nUne erreur inattendue s'est produite : {e}")
 
-    def filter_by_category(self, data: List[List[str]]) -> Optional[List[List[str]]]:
-        """
-        Filtre les données par catégorie choisie par l'utilisateur.
-
-        Args:
-            data (List[List[str]]): Données complètes à filtrer
-
-        Returns:
-            Optional[List[List[str]]]: Données filtrées ou None
-        """
-        # Extraire les catégories uniques
-        unique_categories = sorted(set(row[3] for row in data))
-
-        # Afficher les catégories disponibles
-        print("\nCatégories disponibles :")
-        for i, category in enumerate(unique_categories, 1):
-            print(f"{i}. {category}")
-        print(f"{len(unique_categories) + 1}. Retour au menu principal")
-
-        # Obtenir le choix de catégorie avec validation
-        try:
-            choix_categorie = self._get_validated_input(
-                "Entrez le numéro de la catégorie : ",
-                [str(i) for i in range(1, len(unique_categories) + 2)],
-                "Veuillez entrer un numéro de catégorie valide."
-            )
-
-            # Option de retour au menu principal
-            if choix_categorie == str(len(unique_categories) + 1):
-                return None
-
-            # Récupérer la catégorie sélectionnée
-            selected_category = unique_categories[int(choix_categorie) - 1]
-
-            # Filtrer les données par catégorie
-            filtered_data = [row for row in data if row[3] == selected_category]
-
-            # Afficher les données filtrées
-            print(f"\n--- Données pour la catégorie '{selected_category}' ---")
-            if filtered_data:
-                for row in filtered_data:
-                    print(row)
-
-                # Options supplémentaires avec les données filtrées
-                print("\nQue voulez-vous faire ?")
-                print("1. Trier ces données")
-                print("2. Revenir au menu principal")
-
-                choix_suite = self._get_validated_input(
-                    "Entrez votre choix (1-2) : ",
-                    ['1', '2'],
-                    "Veuillez entrer 1 pour trier ou 2 pour revenir au menu."
-                )
-
-                if choix_suite == '1':
-                    # Appeler la méthode de tri sur les données filtrées
-                    return self.advanced_sort_method(filtered_data)
-
-                return filtered_data
-
-            print("Aucune donnée trouvée pour cette catégorie.")
-            return None
-
-        except Exception as e:
-            print(f"Une erreur s'est produite : {e}")
-            return None
+            original_data = data.copy()
+            current_data = original_data.copy()
 
     def generate_csv_report(self, data: List[List[str]]) -> None:
         """
@@ -492,38 +430,25 @@ class CSVMerger:
             # Menu principal avec validation
             print("\nQue voulez-vous faire ?")
             print("1. Trier les données")
-            print("2. Filtrer par catégorie")
-            print("3. Générer un rapport récapitulatif")
-            print("4. Quitter")
+            print("2. Générer un rapport récapitulatif")
+            print("3. Quitter")
 
             try:
                 choix_principal = self._get_validated_input(
                     "Entrez votre choix (1-4) : ",
-                    ['1', '2', '3', '4'],
+                    ['1', '2', '3',],
                     "Veuillez entrer 1 pour trier, 2 pour filtrer, 3 pour générer un rapport ou 4 pour quitter."
                 )
 
-                if choix_principal == '4':
+                if choix_principal == '3':
                     print("Fin du programme.")
                     break
 
                 if choix_principal == '1':
                     # Appeler la méthode de tri avancée
-                    sorted_data = self.advanced_sort_method(merged_data)
-
-                    if sorted_data:
-                        # Mettre à jour les données fusionnées avec les données triées
-                        merged_data = sorted_data
+                    self.advanced_sort_method(merged_data)
 
                 if choix_principal == '2':
-                    # Filtrer par catégorie
-                    filtered_data = self.filter_by_category(merged_data)
-
-                    if filtered_data:
-                        # Mettre à jour les données fusionnées si nécessaire
-                        merged_data = filtered_data
-
-                if choix_principal == '3':
                     # Générer un rapport récapitulatif
                     self.generate_csv_report(merged_data)
 

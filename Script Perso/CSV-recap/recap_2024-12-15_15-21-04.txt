@@ -1,0 +1,27 @@
+=== RAPPORT RÉCAPITULATIF DES DONNÉES CSV ===
+Date et heure : 2024-12-15_15-21-04
+
+--- STATISTIQUES GÉNÉRALES ---
+Nombre total d'articles : 8
+Quantité totale : 367.00
+Valeur totale : 25186.25 €
+
+--- ANALYSE PAR CATÉGORIE ---
+
+VOITURE:
+  Quantité totale : 7.00
+  Valeur totale : 25006.00 €
+  Nombre d'articles : 2
+  Articles : Gaillardo, F150
+
+FRUITS:
+  Quantité totale : 155.00
+  Valeur totale : 93.25 €
+  Nombre d'articles : 3
+  Articles : Pomme, Banane, Fraise
+
+LÉGUMES:
+  Quantité totale : 205.00
+  Valeur totale : 87.00 €
+  Nombre d'articles : 3
+  Articles : Carotte, Courgette, Tomate
