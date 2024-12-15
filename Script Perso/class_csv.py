@@ -6,7 +6,6 @@ from datetime import datetime
 
 class InputError(Exception):
     """Exception personnalisée pour les erreurs d'input utilisateur."""
-    pass
 
 
 class CSVMerger:
@@ -66,7 +65,8 @@ class CSVMerger:
             print(f"Erreur lors de la création des répertoires : {e}")
             sys.exit(1)
 
-    def _validate_csv_file(self, file_path: str) -> bool:
+    @staticmethod
+    def _validate_csv_file(file_path: str) -> bool:
         """
         Vérifie la structure du fichier CSV.
 
@@ -125,7 +125,8 @@ class CSVMerger:
             return None
         return merged_data
 
-    def write_csv(self, data: List[List[str]], output_path: str) -> None:
+    @staticmethod
+    def write_csv(data: List[List[str]], output_path: str) -> None:
         """
         Écrit les données dans un fichier CSV.
 
@@ -149,7 +150,8 @@ class CSVMerger:
         else:
             print("Aucune donnée à écrire.")
 
-    def _get_validated_input(self,
+    @staticmethod
+    def _get_validated_input(
                              prompt: str,
                              valid_options: Optional[List[str]] = None,
                              error_message: Optional[str] = None) -> str:
