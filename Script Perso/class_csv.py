@@ -481,7 +481,7 @@ class CSVMerger:
 
             try:
                 choix_principal = self._get_validated_input(
-                    "Entrez votre choix (1-4) : ",
+                    "Entrez votre choix (1-3) : ",
                     ['1', '2', '3',],
                     "Veuillez entrer 1 pour trier, 2 pour filtrer," +
                     "3 pour générer un rapport ou 4 pour quitter."
